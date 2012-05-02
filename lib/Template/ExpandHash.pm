@@ -285,8 +285,8 @@ significantly help performance.
 
 =item Refactor
 
-All of the real work is done in one giant recursive function.  It could
-profitably be broken up into more digestable pieces.
+All of the real work is done in one giant recursive function.  It could be
+broken up into more digestable pieces.
 
 =item Conditionals and loops
 
@@ -338,7 +338,7 @@ L<http://search.cpan.org/dist/Template-ExpandHash/>
 
 =head1 ACKNOWLEDGEMENTS
 
-This module was produced under contract to Ziprecruiter.com.  They are a good
+This module was produced under contract to ZipRecruiter.com.  They are a good
 group of people, and I thank them for allowing this to be open sourced.
 
 All mistakes are, of course, mine.
@@ -347,7 +347,7 @@ All mistakes are, of course, mine.
 
 Copyright 2012 Ben Tilly.
 
-Sponsored by Ziprecruiter.com.
+Sponsored by ZipRecruiter.com.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
