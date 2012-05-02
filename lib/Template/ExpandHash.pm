@@ -8,7 +8,6 @@ use Exporter 'import';
 
 our @EXPORT_OK = qw(expand_hash);
 our $VERSION = '0.01';
-our $ON_ERROR = \&confess;
 
 sub expand_hash {
   my $params;
@@ -22,7 +21,7 @@ sub expand_hash {
     $return_ref = 0;
   }
   else {
-    $ON_ERROR->("Need a hash or hash ref");
+    confess("Need a hash or hash ref");
   }
 
   $params = {_deep_copy(%$params)};
