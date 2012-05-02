@@ -16,6 +16,7 @@ my $original_config =  {
     email_pager_email   => 'Pagers <[% default_email %]>',
     some_escaped_value  => '\[% user ]%',
     conflicting_sub     => 'outer',
+    undef_value         => undef,
     # etc
     email => {
       qa_email          => '[% email_qa_email %]',
@@ -35,6 +36,7 @@ my $expected_config = {
     email_pager_email   => 'Pagers <btilly@company.com>',
     some_escaped_value  => '[% user ]%',
     conflicting_sub     => 'outer',
+    undef_value         => undef,
     # etc
     email => {
         qa_email        => 'QA <btilly@company.com>',

@@ -70,8 +70,25 @@ sub _do_substitutions {
       delete $todo->{$key};
       next;
     }
+    elsif ('HASH' eq ref($value)) {
+      (my $this_changes, my $left, $value) = _do_substitutions([$todo->{$key}, $value], [$todo, $to_change], @rest);
+      if ($this_changes) {
+        if (keys %$left) {
+          $todo->{$key} = $left;
+        }
+        else {
+          delete $todo->{$key};
+        }
+        $to_change->{$key} = $value;
+        $changes += $this_changes;
+      }
+    }
+    elsif (not $value) {
+      # We don't need to expand false values, and undef is not a string.
+      delete $todo->{$key};
+    }
     elsif (not ref($value)) {
-      # Treat as a string.
+      # It is a string, tokenize then parse and expand.
       my @tokens = ($value =~ /(\\.|\[%|%]|\w+|.)/g);
       my $final = "";
       TOKENS: while (@tokens) {
@@ -119,19 +136,6 @@ sub _do_substitutions {
           # print "Changed $value to $final\n";
           $to_change->{$key} = $final;
         }
-      }
-    }
-    elsif ('HASH' eq ref($value)) {
-      (my $this_changes, my $left, $value) = _do_substitutions([$todo->{$key}, $value], [$todo, $to_change], @rest);
-      if ($this_changes) {
-        if (keys %$left) {
-          $todo->{$key} = $left;
-        }
-        else {
-          delete $todo->{$key};
-        }
-        $to_change->{$key} = $value;
-        $changes += $this_changes;
       }
     }
     else {
