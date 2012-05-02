@@ -64,7 +64,8 @@ sub _do_substitutions {
 
   my $changes = 0;
   for my $key (keys %$todo) {
-    my $value = $to_change->{$key};    if (not $value) {
+    my $value = $to_change->{$key};
+    if (not $value) {
       # print "Removing $key (no value)\n";
       delete $todo->{$key};
       next;
@@ -81,10 +82,6 @@ sub _do_substitutions {
         $to_change->{$key} = $value;
         $changes += $this_changes;
       }
-    }
-    elsif (not $value) {
-      # We don't need to expand false values, and undef is not a string.
-      delete $todo->{$key};
     }
     elsif (not ref($value)) {
       # It is a string, tokenize then parse and expand.
