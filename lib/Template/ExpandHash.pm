@@ -135,6 +135,7 @@ sub _do_substitutions {
       }
     }
     else {
+      # We don't touch the internals of array refs, objects, etc.
       delete $todo->{$key};
     }
   }
@@ -172,17 +173,30 @@ configuration data structure, and then load multiple layers of tweaks for
 specific environments.  This can happen within pure Perl as in this example:
 
     $PARAM{prod} = {
-        # Some data here.
+        email_qa_email      => undef,
+        email_pager_email   => 'pagerlist@company.com',
+        some_escaped_value  => '\[% user ]%',
+        # etc
+        email => {
+          qa_email          => '[% email_qa_email %]',
+          pager_email       => '[% email_pager_email %]',
+          # etc
+        },
+        # More data here.
     };
 
     $PARAM{sandbox} = {
         %{$PARAM{prod}},
-        # More data here, some of which overrides prod
+        default_email       => '[% user %]@company.com',
+        email_qa_email      => 'QA <[% default_email %]>',
+        email_pager_email   => 'Pagers <[% default_email %]>',
+        # More data here, some of which overrides prod.
     };
 
     $PARAM{btilly} = {
         %{$PARAM{sandbox}},
-        # More data here, some of which overrides the sandbox
+        user                => 'btilly',
+        # More data here, some of which overrides the sandbox.
     };
 
 Alternately it can happen in a series of files which you might load from
@@ -211,6 +225,7 @@ Suppose that our final set of parameters worked out to be something like:
           pager_email       => '[% email_pager_email %]',
           # etc
         },
+        # More data here.
     }
 
 Then we can expand all of the template parameters:
@@ -224,13 +239,14 @@ And get:
         default_email      => 'btilly@company.com',
         email_qa_email     => 'QA <btilly@company.com>',
         email_pager_email  => 'Pagers <btilly@company.com>',
-        some_escaped_value  => '[% user ]%',
+        some_escaped_value => '[% user ]%',
         # etc
         email => {
             qa_email       => 'QA <btilly@company.com>',
             pager_email    => 'Pagers <btilly@company.com>',
             # etc
         },
+        # More data here.
     }
 
 without having to manually override a long list of values.  This makes your
